@@ -1,3 +1,9 @@
 [deps]
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-Phenology = "cbac146f-1536-4c33-bb96-ef1f0087293b"
+DocumenterCitations = "daee34ce-89f3-4625-b898-19384cb65244"
+Literate = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
+Phenology = "d63380a9-e012-46f8-9dac-53fac26854bd"
+
+[compat]
+Documenter = "1.15"
