@@ -5,7 +5,7 @@ StationsPath ="stations"
 
 # cd("C:/Users/goninarn/.julia/dev/Phenology")
 
-@load "test/references.jld2"
+@load join(@__DIR__,"references.jld2")
 
 @testset "Phenology.jl" begin
     # Write your tests here.
