@@ -1,0 +1,13 @@
+name = "Phenology"
+uuid = "cbac146f-1536-4c33-bb96-ef1f0087293b"
+authors = ["ArnaudG0649 <arnaudcmc@hotmail.com> and contributors"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
