@@ -1,11 +1,11 @@
 using Phenology, JLD2 #, CSV, DataFrames, DataFramesMeta, Dates
 using Test
 
-StationsPath ="stations"
+StationsPath =joinpath(@__DIR__,"..","stations")
 
 # cd("C:/Users/goninarn/.julia/dev/Phenology")
 
-@load join(@__DIR__,"references.jld2")
+ref_data = load(joinpath(@__DIR__,"references.jld2"))["ref_data"]
 
 @testset "Phenology.jl" begin
     # Write your tests here.
@@ -41,28 +41,28 @@ StationsPath ="stations"
     G_EB_Nantes4, G_BB_Nantes4 = Vine_Phenology_Pred(df4)
     G_EB_Nantes8, G_BB_Nantes8 = Vine_Phenology_Pred(df8)
 
-    @test A_EB_Montpellier == A_DB_Montpellier_ref
-    @test A_EB_Bonn == A_DB_Bonn_ref    
-    @test A_EB_Nantes == A_DB_Nantes_ref
-    @test A_EB_Nantes4 == A_DB_Nantes4_ref
-    @test A_EB_Nantes8 == A_DB_Nantes8_ref
-    @test A_BB_Montpellier == A_BB_Montpellier_ref
-    @test A_BB_Bonn == A_BB_Bonn_ref
-    @test A_BB_Nantes == A_BB_Nantes_ref
-    @test A_BB_Nantes4 == A_BB_Nantes4_ref
-    @test A_BB_Nantes8 == A_BB_Nantes8_ref
-    @test FRM_Montpellier == FRM_Montpellier_ref
-    @test FRM_Bonn == FRM_Bonn_ref
-    @test FRM_Nantes == FRM_Nantes_ref
-    @test G_EB_Montpellier == G_DB_Montpellier_ref
-    @test G_EB_Bonn == G_DB_Bonn_ref    
-    @test G_EB_Nantes == G_DB_Nantes_ref
-    @test G_EB_Nantes4 == G_DB_Nantes4_ref
-    @test G_EB_Nantes8 == G_DB_Nantes8_ref
-    @test G_BB_Montpellier == G_BB_Montpellier_ref
-    @test G_BB_Bonn == G_BB_Bonn_ref
-    @test G_BB_Nantes == G_BB_Nantes_ref
-    @test G_BB_Nantes4 == G_BB_Nantes4_ref
-    @test G_BB_Nantes8 == G_BB_Nantes8_ref
+    @test A_EB_Montpellier == ref_data[1]
+    @test A_EB_Bonn == ref_data[2]   
+    @test A_EB_Nantes == ref_data[3]
+    @test A_EB_Nantes4 == ref_data[4]
+    @test A_EB_Nantes8 == ref_data[5]
+    @test A_BB_Montpellier == ref_data[6]
+    @test A_BB_Bonn == ref_data[7]
+    @test A_BB_Nantes == ref_data[8]
+    @test A_BB_Nantes4 == ref_data[9]
+    @test A_BB_Nantes8 == ref_data[10]
+    @test G_EB_Montpellier == ref_data[11]
+    @test G_EB_Bonn == ref_data[12]  
+    @test G_EB_Nantes == ref_data[13]
+    @test G_EB_Nantes4 == ref_data[14]
+    @test G_EB_Nantes8 == ref_data[15]
+    @test G_BB_Montpellier == ref_data[16]
+    @test G_BB_Bonn == ref_data[17]
+    @test G_BB_Nantes == ref_data[18]
+    @test G_BB_Nantes4 == ref_data[19]
+    @test G_BB_Nantes8 == ref_data[20]
+    @test FRM_Montpellier == ref_data[21]
+    @test FRM_Bonn == ref_data[22]
+    @test FRM_Nantes == ref_data[23]
     #If ref_results is executed, replace "DB" with "EB" in the name of the ref variables (for exemple A_DB_Montpellier_ref -> A_EB_Montpellier_ref)
 end

@@ -1,5 +1,5 @@
-import Pkg#hide
-Pkg.activate(".")#src
+stations_folder = join("stations")#hide
+nothing#hide
 md"""
 ```@meta
 CurrentModule = Phenology
@@ -22,14 +22,14 @@ As you will see further, the functions to predict phenological dates can take as
 """
 using Phenology
 #average daily temperatures in Montpellier
-df_TG_Montpellier = extract_series(joinpath("stations", "TG_Montpellier.txt"))
+df_TG_Montpellier = extract_series(joinpath(stations_folder, "TG_Montpellier.txt"))
 first(df_TG_Montpellier, 10)
 md"""
 ### Apple Phenology
 
 To predict apple dormancy break and budburst dates, just call the function [`Apple_Phenology_Pred`](@ref) on daily average temperatures data : 
 """
-A_EB_Montpellier, A_BB_Montpellier = Apple_Phenology_Pred(df_TG_Montpellier.TG,df_TG_Montpellier.DATE)
+A_EB_Montpellier, A_BB_Montpellier = Apple_Phenology_Pred(df_TG_Montpellier.TG, df_TG_Montpellier.DATE)
 first(A_BB_Montpellier, 5) #The budburst dates of the 5 first years.
 md"""
 Note that `Apple_Phenology_Pred(df_TG_Montpellier)` and `Apple_Phenology_Pred(joinpath("stations", "TG_Montpellier.txt"))` return the same output. 
@@ -39,7 +39,7 @@ Note that `Apple_Phenology_Pred(df_TG_Montpellier)` and `Apple_Phenology_Pred(jo
 To predict grapevine dormancy break and budburst dates, call the function [`Vine_Phenology_Pred`](@ref) on daily minimal and maximal temperatures data : 
 
 """
-G_EB_Montpellier, G_BB_Montpellier = Vine_Phenology_Pred(joinpath("stations", "TN_Montpellier.txt"), joinpath("stations", "TX_Montpellier.txt"))
+G_EB_Montpellier, G_BB_Montpellier = Vine_Phenology_Pred(joinpath(stations_folder, "TN_Montpellier.txt"), joinpath(stations_folder, "TX_Montpellier.txt"))
 first(G_BB_Montpellier, 5)
 md"""
 Like the apple function, calling the other methods with dataframes or vectors return the same results (see [`Vine_Phenology_Pred`](@ref)).
@@ -48,8 +48,8 @@ Like the apple function, calling the other methods with dataframes or vectors re
 
 You can also predict the risk of freezing after budburst with the functions [`FreezingRisk`](@ref) and [`FreezingRiskMatrix`](@ref), based on minimal daily temperatures, their dates and the budburst dates :
 """
-df_TN_Bonn = extract_series(joinpath("stations", "TN_Bonn.txt"))
-A_EB_Bonn, A_BB_Bonn = Apple_Phenology_Pred(joinpath("stations", "TG_Bonn.txt"))
+df_TN_Bonn = extract_series(joinpath(stations_folder, "TN_Bonn.txt"))
+A_EB_Bonn, A_BB_Bonn = Apple_Phenology_Pred(joinpath(stations_folder, "TG_Bonn.txt"))
 nothing#hide
 # - For exemple we predict the freezing risk after the fourth apple budburst in 1981 : 
 FreezingRisk(df_TN_Bonn, A_BB_Bonn[4])
@@ -64,7 +64,7 @@ For exemple you can plot the annual phenological dates from predictions on multi
 """
 using CairoMakie
 
-A_EB_Nantes, A_BB_Nantes = Apple_Phenology_Pred(joinpath("stations", "TG_Nantes.txt"))
+A_EB_Nantes, A_BB_Nantes = Apple_Phenology_Pred(joinpath(stations_folder, "TG_Nantes.txt"))
 
 colors = ["blue", "orange", "green"]
 label = ["Montpellier", "Bonn", "Nantes"]
