@@ -1,0 +1,18 @@
+<!-- 
+I want to introduce this specific function : 
+
+```@docs
+FreezingRiskMatrix(x)
+``` -->
+
+```@autodocs
+Modules = [Phenology]
+```
+
+<!-- ```@autodocs
+Modules = [Phenology]
+``` -->
+
+
+[![Build Status](https://github.com/ArnaudG0649/Phenology.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/ArnaudG0649/Phenology.jl/actions/workflows/CI.yml?query=branch%3Amaster)
+[![Coverage](https://codecov.io/gh/ArnaudG0649/Phenology.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/ArnaudG0649/Phenology.jl)
