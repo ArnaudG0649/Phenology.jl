@@ -16,7 +16,7 @@ function Apple_Phenology_Pred(TG_vec::AbstractVector,
     for (Tg, date_) in zip(TG_vec, date_vec)
         EB_vec, BB_vec, chilling, forcing, sumchilling, sumforcing = PhenoLoopStep(Tg, date_, model, EB_vec, BB_vec, chilling, forcing, sumchilling, sumforcing)
     end
-    forcing == true ? pop!(EB_vec) : nothing #forcing == true at the end means that it added a EB date in EB_vec which won't have it corresponding BB date in BB_vec
+    forcing ? pop!(EB_vec) : nothing #forcing == true at the end means that it added a EB date in EB_vec which won't have it corresponding BB date in BB_vec
     return EB_vec, BB_vec
 end
 

@@ -127,4 +127,3 @@ end
 
 Common_indexes(files::String...) = Common_indexes(truncate_MV.(extract_series.(files)))
 Common_indexes(files::AbstractVector{String}) = Common_indexes(truncate_MV.(extract_series.(files)))
-

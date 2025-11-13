@@ -19,7 +19,7 @@ function Apple_Phenology_Pred(TG_vec::AbstractVector, #tip : put all arguments i
     for (Tg, date_) in zip(TG_vec, date_vec)
         if (month(date_), day(date_)) == CPO #If it's the start of the chilling 
             chilling = true
-            sumchilling = 0.
+            sumchilling = 0
         end
         if chilling #During chilling, each day we sum the chilling action function applied to the daily temperature.
             sumchilling += Rc(Tg, chilling_model)
@@ -27,7 +27,7 @@ function Apple_Phenology_Pred(TG_vec::AbstractVector, #tip : put all arguments i
                 push!(DB_vec, date_)
                 chilling = false
                 forcing = true
-                sumforcing = 0.
+                sumforcing = 0
             end
         end
         if forcing #For forcing, it's the same logic, and in the end we get the budburst date.
