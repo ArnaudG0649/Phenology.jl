@@ -71,18 +71,19 @@ ref_data = load(joinpath(@__DIR__, "references.jld2"))["ref_data"]
         @subset(:variete_cultivar_ou_provenance .== "Chasselas")
         @subset(:nom_du_site .== "INRA Domaine de Vassal")
     end
+    years = df_vassal_chasselas.annee
 
     #Testing apple model with Pred_n
 
     df_TG_Montpellier = extract_series(joinpath(StationsPath, "TG_Montpellier.txt"))
-    TG_vec, date_vec = Take_temp_year(df_TG_Montpellier, 2020, CPO=(10, 30)), df_TG_Montpellier.DATE[Iyear_CPO(df_TG_Montpellier.DATE, 2020, CPO=(10, 30))]
-    @test length(Date(2019, 10, 30):Apple_Phenology_Pred(TG_vec, date_vec)[2][1]) == Pred_n(AppleModel(), TG_vec)
+    TG_vecs, date_vecs = map(y -> Take_temp_year(df_TG_Montpellier, y, CPO=(10, 30)), years), map(y -> df_TG_Montpellier.DATE[Iyear_CPO(df_TG_Montpellier.DATE, y, CPO=(10, 30))], years)
+    @test [length(Date(year - 1, 10, 30):Apple_Phenology_Pred(TG_vec, date_vec)[2][1]) for (year, TG_vec, date_vec) in zip(years, TG_vecs, date_vecs)] == map(TG_vec -> Pred_n(AppleModel(), TG_vec), TG_vecs)
 
 
     #Testing grapevine model with Pred_n
 
     date_vec, x = Common_indexes(joinpath(StationsPath, "TN_Montpellier.txt"), joinpath(StationsPath, "TX_Montpellier.txt"))
-    x_2020, date_vec_2020 = Take_temp_year(x, date_vec, 2020), date_vec[Iyear_CPO(date_vec, 2020, CPO=(8, 1))]
-    @test length(Date(2019, 8, 1):Vine_Phenology_Pred(x_2020, date_vec_2020)[2][1]) == Pred_n(BRIN_Model(), x_2020)
+    x_vec, date_vecs = map(y -> Take_temp_year(x, date_vec, y), years), map(y -> date_vec[Iyear_CPO(date_vec, y, CPO=(8, 1))], years)
+    @test [length(Date(year - 1, 8, 1):Vine_Phenology_Pred(x, date_vec)[2][1]) for (year, x, date_vec) in zip(years, x_vec, date_vecs)] == map(x -> Pred_n(BRIN_Model(), x), x_vec)
 
 end

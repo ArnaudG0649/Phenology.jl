@@ -5,3 +5,6 @@
 /docs/Manifest*.toml
 /docs/build/
 /Data_BB.xlsx
+/test/results.jl
+/g.pdf
+/h.pdf

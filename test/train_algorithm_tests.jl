@@ -1,4 +1,4 @@
-using Phenology, JLD2, CSV, DataFrames, DataFramesMeta, Dates, XLSX, Optimization, OptimizationOptimJL, ForwardDiff
+using Phenology, JLD2, CSV, DataFrames, DataFramesMeta, Dates, XLSX, Optimization, OptimizationOptimJL, ForwardDiff, ReverseDiff, FiniteDiff, DifferentiationInterface
 StationsPath = joinpath(@__DIR__, "..", "stations")
 
 df = DataFrame(XLSX.readtable(joinpath(@__DIR__, "..", "Data_BB.xlsx"), "data_Tempo"))
@@ -21,57 +21,52 @@ x_vec = BRIN_Montpellier_Take_temp_year.(years)
 date_vecs = BRIN_Montpellier_date_vec_year.(years)
 n_train = df_vassal_chasselas.jour_de_l_annee .+ length(Date(2019, 8, 1):Date(2019, 12, 31))
 
+param = [106.3, 6971.8]
+map(x -> Pred_n([2.17, param[1], (5, 25), param[2]], x), x_vec) == map(x -> Pred_n_old([2.17, param[1], (5, 25), param[2]], x), x_vec) 
+
+
 # param = [chilling_target, forcing_target] 
 # Data_vec = [x_vec, n_train]
 # MSE_BRIN(param, Data_vec) = sum((map(x -> Pred_n(BRIN_Model((8, 1), 2.17, param[1], 5, 25, param[2]), x), Data_vec[1]) .- Data_vec[2]) .^ 2) / length(Data_vec[2])
 MSE_BRIN(param, Data_vec) = sum((map(x -> Pred_n([2.17, param[1], (5, 25), param[2]], x), Data_vec[1]) .- Data_vec[2]) .^ 2) / length(Data_vec[2])
+# MSE_BRIN_old(param, Data_vec) = sum((map(x -> Pred_n_old([2.17, param[1], (5, 25), param[2]], x), Data_vec[1]) .- Data_vec[2]) .^ 2) / length(Data_vec[2])
+
+function MSE_BRIN2(param, Data_vec)
+    f(x) = Pred_n([2.17, param[1], (5, 25), param[2]], x)
+    return sum(abs2, f.(Data_vec[1]) - Data_vec[2]) / length(Data_vec[2])
+end
+
+function MSE_BRIN3(param, Data_vec)
+    f(x) = Pred_n_old([2.17, param[1], (5, 25), param[2]], x)
+    return sum(abs2, f.(Data_vec[1]) - Data_vec[2]) / length(Data_vec[2])
+end
+
+# optf = OptimizationFunction(MSE_BRIN, AutoForwardDiff())
+# prob = OptimizationProblem(optf, [106.3, 6971.8], Data_vec)
+# Results = Optimization.solve(prob, BFGS(), maxiters=10000)
+
 
 param = [106.3, 6971.8]
 Data_vec = (x_vec, n_train)
-MSE_BRIN(param, Data_vec) |> sqrt
-# algo=NelderMead()
+MSE_BRIN(param, Data_vec) #0
 
-optf = OptimizationFunction(MSE_BRIN, AutoForwardDiff())
-prob = OptimizationProblem(optf, [106., 8000.], Data_vec)
-Results = Optimization.solve(prob, LBFGS(), maxiters=1000000)
-
-
-#Second new function Pred_n
-
-date_vec, x = Common_indexes(joinpath(StationsPath, "TN_Montpellier.txt"), joinpath(StationsPath, "TX_Montpellier.txt"))
-x_2020, date_vec_2020 = Take_temp_year(x, date_vec, 2020), date_vec[Iyear_CPO(date_vec, 2020, CPO=(8, 1))]
-
-function Pred_n_no_loop(model::AbstractVector, x::AbstractMatrix)
-    C_units = cumsum(map(T -> Rc(T, model[1]), eachrow([x_2020[1:(end-1), :] x_2020[2:end, 1]])))
-    EB = findfirst(C_units .> model[2])
-    H_units = cumsum(map(T -> Rf(T, model[3]), eachrow([x_2020[1:(end-1), :] x_2020[2:end, 1]]))[EB:end])
-    return findfirst(H_units .> model[4]) + EB - 1
-end
-function Pred_n_no_loop(model::BRIN_Model, x::AbstractMatrix)
-    C_units = cumsum(map(T -> Rc(T, model), eachrow([x_2020[1:(end-1), :] x_2020[2:end, 1]])))
-    EB = findfirst(C_units .> model.chilling_target)
-    H_units = cumsum(map(T -> Rf(T, model), eachrow([x_2020[1:(end-1), :] x_2020[2:end, 1]]))[EB:end])
-    return findfirst(H_units .> model.forcing_target) + EB - 1
-end
-
-model = [2.17, 119.0, (8.19, 25.), 13236]
+# param_vec = vcat([[[c,h] for c in 100:0.1:130] for h in 6500:1:9500]...)
+f(u) = MSE_BRIN(u,Data_vec)
+f2(u) = MSE_BRIN2(u,Data_vec)
+f3(u) = MSE_BRIN3(u,Data_vec)
 
 using BenchmarkTools
 
-@btime Pred_n(model, x_2020)
-@btime Pred_n_no_loop(model, x_2020)
-@btime Pred_n_no_loop(BRIN_Model(), x_2020)
+@btime MSE_vec = f([106.3, 6971.8])
+@btime MSE_vec2 = f2([106.3, 6971.8])
+@btime MSE_vec3 = f3([106.3, 6971.8])
 
 
 
 
-MSE_BRIN(param, Data_vec) = sum((map(x -> Pred_n([2.17, param[1], (5, 25), param[2]], x), Data_vec[1]) .- Data_vec[2]) .^ 2) / length(Data_vec[2])
 
-param = [106.3, 6971.8]
-Data_vec = (x_vec, n_train)
-MSE_BRIN(param, Data_vec) |> sqrt
-# algo=NelderMead()
+optf = OptimizationFunction(MSE_BRIN)
+prob = OptimizationProblem(optf, [150., 9000.], Data_vec)
+Results = Optimization.solve(prob, NelderMead(), maxiters=1000)
+Results.objective #0 : Cela signifie que sur données générées avec paramètres choisies, il est capable de trouver la sol
 
-optf = OptimizationFunction(MSE_BRIN, AutoForwardDiff())
-prob = OptimizationProblem(optf, [106., 8000.], Data_vec)
-Results = Optimization.solve(prob, LBFGS(), maxiters=1000000)
