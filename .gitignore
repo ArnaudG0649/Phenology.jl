@@ -8,3 +8,6 @@
 /test/results.jl
 /g.pdf
 /h.pdf
+/MSE_vec.jld2
+/Global_optim_methods.csv
+/Diff_Ev_methods.csv
