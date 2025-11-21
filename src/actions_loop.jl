@@ -1,4 +1,4 @@
-Iyear_CPO(date::AbstractVector{Date}, year::Integer; CPO=(8, 1)) = Date(year - 1, CPO[1], CPO[2]) .<= date .< Date(year, CPO[1], CPO[2]) - Day(1)
+Iyear_CPO(date::AbstractVector{Date}, year::Integer; CPO=(8, 1)) = Date(year - 1, CPO[1], CPO[2]) .<= date .< Date(year, CPO[1], CPO[2])
 
 Take_temp_year(x::AbstractVector, date_vec, year; CPO=(8, 1)) = x[Iyear_CPO(date_vec, year, CPO=CPO)]
 Take_temp_year(x::AbstractMatrix, date_vec, year; CPO=(8, 1)) = x[Iyear_CPO(date_vec, year, CPO=CPO), :]
@@ -194,47 +194,13 @@ function PhenoLoopStep(T, n::Integer, model, chilling, forcing, sumchilling, sum
     return n, chilling, forcing, sumchilling, sumforcing
 end
 # Below model = [Rc_param,chilling_target,Rf_param,forcing_target]
-function PhenoLoopStep(T, n::Integer, model::AbstractVector, chilling, forcing, sumchilling, sumforcing)
-    n += 1
-    if chilling #During chilling, each day we sum the chilling action function applied to the daily temperature.
-        @views sumchilling += Rc(T, model[1])
-        if @views sumchilling > model[2] #When the sum is superior to the chilling target, we swtich to the second part which is forcing.
-            chilling = false
-            forcing = true
-            sumforcing = 0.
-        end
-    end
-    if forcing #For forcing, it's the same logic, and in the end we get the budburst date.
-        @views sumforcing += Rf(T, model[3])
-        if @views sumforcing > model[4]
-            forcing = false
-        end
-    end
-    return n, chilling, forcing, sumchilling, sumforcing
-end
-function PhenoLoopStep!(T, model, v)
-    v.n += 1
-    if v.chilling #During chilling, each day we sum the chilling action function applied to the daily temperature.
-        @views v.sumchilling += Rc(T, model)
-        if @views v.sumchilling > model.chilling_target #When the sum is superior to the chilling target, we swtich to the second part which is forcing.
-            v.chilling = false
-            v.forcing = true
-            v.sumforcing = 0.
-        end
-    end
-    if v.forcing #For forcing, it's the same logic, and in the end we get the budburst date.
-        @views v.sumforcing += Rf(T, model)
-        if @views v.sumforcing > model.forcing_target
-            v.forcing = false
-        end
-    end
-end
+
 
 function Pred_n(model, T::AbstractVector)
     chilling = true
     forcing = false
     sumchilling, sumforcing, n = 0, 0, 0
-    while (chilling || forcing) && n < 365
+    while (chilling || forcing) && n < 364
         @views n, chilling, forcing, sumchilling, sumforcing = PhenoLoopStep(T[n+1], n, model, chilling, forcing, sumchilling, sumforcing)
     end
     return n
@@ -243,7 +209,7 @@ function Pred_n(model, x::AbstractMatrix)
     chilling = true
     forcing = false
     sumchilling, sumforcing, n = 0, 0, 0
-    while (chilling || forcing) && n < 365
+    while (chilling || forcing) && n < 364
         @views n, chilling, forcing, sumchilling, sumforcing = PhenoLoopStep([x[n+1, :]; x[n+2, 1]], n, model, chilling, forcing, sumchilling, sumforcing)
     end
     return n
@@ -252,23 +218,8 @@ function Pred_n(model, TN::AbstractVector, TX::AbstractVector)
     chilling = true
     forcing = false
     sumchilling, sumforcing, n = 0, 0, 0
-    while (chilling || forcing) && n < 365
+    while (chilling || forcing) && n < 364
         @views n, chilling, forcing, sumchilling, sumforcing = PhenoLoopStep((TN[n+1], TX[n+1], TN[n+2]), n, model, chilling, forcing, sumchilling, sumforcing)
     end
     return n
-end
-
-mutable struct LoopStruct{I<:Integer,F<:AbstractFloat}
-    n::I
-    chilling::Bool
-    forcing::Bool
-    sumchilling::F
-    sumforcing::F
-end
-function Pred_n2(model, x::AbstractMatrix)
-    v = LoopStruct(0,true, false, 0., 0.) #[n, chilling, forcing, sumchilling, sumforcing]
-    while (v.chilling || v.forcing) && v.n < 365
-        @views PhenoLoopStep!([x[v.n+1, :]; x[v.n+2, 1]], model, v)
-    end
-    return v.n
 end

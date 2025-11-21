@@ -1,5 +1,8 @@
-using Phenology, JLD2 #, CSV, DataFrames, DataFramesMeta, Dates
+using Phenology, JLD2 ,DataFrames, DataFramesMeta, Dates, XLSX
 using Test
+
+# GetAllAttributes(object) = map(field -> getfield(object, field), fieldnames(typeof(object)))
+# ## Source : https://discourse.julialang.org/t/get-the-name-and-the-value-of-every-field-for-an-object/87052/2
 
 StationsPath = joinpath(@__DIR__, "..", "stations")
 
@@ -85,5 +88,25 @@ ref_data = load(joinpath(@__DIR__, "references.jld2"))["ref_data"]
     date_vec, x = Common_indexes(joinpath(StationsPath, "TN_Montpellier.txt"), joinpath(StationsPath, "TX_Montpellier.txt"))
     x_vec, date_vecs = map(y -> Take_temp_year(x, date_vec, y), years), map(y -> date_vec[Iyear_CPO(date_vec, y, CPO=(8, 1))], years)
     @test [length(Date(year - 1, 8, 1):Vine_Phenology_Pred(x, date_vec)[2][1]) for (year, x, date_vec) in zip(years, x_vec, date_vecs)] == map(x -> Pred_n(BRIN_Model(), x), x_vec)
+
+    #Testing training on toy data
+
+    #Taking the avaible years
+    years = unique(year.(date_vec))
+    complete_year_index = findall(year -> Date(year - 1, 8, 1):Date(year, 8, 1) ⊆ date_vec, years)
+    years = years[complete_year_index]
+
+    #Separating the temperature for each year conveniently to be used by Pred_n function
+    x_vec = [Take_temp_year(x, date_vec, year) for year in years]
+
+    #Defining training data
+    model_target = BRIN_Model((8, 1), 2.17, 111., 5, 25, 6578.3)
+    n_train = [Pred_n(model_target, x) for x in x_vec]
+
+    #Training data and comparing results with true data
+    model = BRIN_Model(date_vec, x, years, n_train .- length(Date(0, 8, 1):Date(0, 12, 31)))
+    n_pred = [Pred_n(model, x) for x in x_vec]
+    Δ = n_train .- n_pred
+    @test sum(Δ .== 0) / length(Δ) > 0.975
 
 end
