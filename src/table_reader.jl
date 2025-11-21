@@ -1,5 +1,5 @@
 #Packages
-using CSV, DataFrames, Dates, DataFramesMeta
+using CSV, DataFrames, Dates, DataFramesMeta, XLSX
 
 """
     truncate_MV(df)
@@ -88,4 +88,11 @@ end
 Common_indexes(files...) = Common_indexes(extract_series.(collect(files))) #println(files == (joinpath(StationsPath,"TN_Montpellier.txt"), joinpath(StationsPath,"TX_Montpellier.txt")))
 Common_indexes(files::AbstractVector{String}) = Common_indexes(extract_series.(files))
 
-
+function read_pheno_table(variety, site; file="Data_BB.xlsx", sheet=nothing)
+    df = @chain begin
+        isnothing(sheet) ? DataFrame(XLSX.readtable(file, XLSX.sheetnames(XLSX.readxlsx(file))[1])) : DataFrame(XLSX.readtable(file, sheet))
+        @subset(:variete_cultivar_ou_provenance .== variety)
+        @subset(:nom_du_site .== site)
+    end
+    return df
+end

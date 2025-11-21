@@ -1,7 +1,7 @@
 module Phenology
 
 export AppleModel, BRIN_Model, Apple_Phenology_Pred, Vine_Phenology_Pred, FreezingRisk, FreezingRiskMatrix, Plot_Pheno_Dates_EB_BB, PlotHistogram, Plot_Freeze_Risk, Plot_Freeze_Risk_sample, Plot_Freeze_Risk_Bar, extract_series, Common_indexes, Pred_n
-export Take_temp_year, Iyear_CPO
+export Take_temp_year, Iyear_CPO, read_pheno_table
 #P.S : Each function with """....""" has to be documented in index.md unless checkdocs=:none
 export Rc, Rf
 
