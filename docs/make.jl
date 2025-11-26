@@ -41,10 +41,10 @@ makedocs(;
     checkdocs=:none
 )
 
-deploydocs(;
-    devbranch = "master",
-    repo="github.com/ArnaudG0649/Phenology.jl",
-)
+# deploydocs(;
+#     devbranch = "master",
+#     repo="github.com/ArnaudG0649/Phenology.jl",
+# )
 
-# using LiveServer; BE CAREFUL TO REMOVE/PUT IN COMMENTS WHEN PUSHING
-# serve(dir="docs/build");
+using LiveServer; # BE CAREFUL TO REMOVE/PUT IN COMMENTS WHEN PUSHING
+serve(dir="docs/build");
