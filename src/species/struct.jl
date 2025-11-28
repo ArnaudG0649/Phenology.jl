@@ -35,7 +35,7 @@ end
 
 
 Structure which contains the parameters for a phenelogical BRIN model for grapevine. The default values are the ones suggested in [garcia_de_cortazar-atauri_performance_2009](@cite) (table 5 p 323).
-With the three last methods you can initiate a BRIN_Model by fitting on temperatures, dates et bud burst dates data (see [Training BRIN models](@ref)). It is done with a differential evolution optimization algorithm.
+With the three last methods you can initiate a `BRIN_Model` by fitting on temperatures, dates et bud burst dates data (see [Training BRIN models](@ref)). It is done with a differential evolution optimization algorithm.
 """
 @concrete struct BRIN_Model
     CPO
