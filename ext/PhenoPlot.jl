@@ -225,7 +225,7 @@ function Phenology.Plot_Pheno_Dates_EB_BB(date_vecEB::Vector{Date}, date_vecBB::
     pltvec = Plot[]
 
     inyear(date_, year_) = year(date_ + min(Month(2), Year(1) - Month(CPO[1]) - Day(CPO[2]))) == year_
-    #For exemple is the EB happens the 15/12/2010, I consider that it belongs to the year 2011, so I had the time to reach 2011.
+    #For example is the EB happens the 15/12/2010, I consider that it belongs to the year 2011, so I had the time to reach 2011.
     #If the CPO is very early (eg the 1st of august 2010) and the BB is very late (e.g the 15th of august 2010), I don't want to consider this BB
     #to belong to year 2011 so I consider EB to belongs to 2011 at least two months before 2011 not before.
     Dictionnaries = (Dict(), Dict())

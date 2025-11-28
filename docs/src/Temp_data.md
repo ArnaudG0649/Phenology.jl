@@ -4,7 +4,7 @@ CurrentModule = Phenology
 
 ## Temperatures data compatibility
 
-As you can see in [Phenological models for each species](@ref), each function that predicts phenological dates from temperatures have methods which take in arguments data temperatures either as vector (for exemple `TG_vec`), dataframe or .txt file. In this page we will explain which temperatures data file this package can handle and how the data is extracted to be used.
+As you can see in [Phenological models for each species](@ref), each function that predicts phenological dates from temperatures have methods which take in arguments data temperatures either as vector (for example `TG_vec`), dataframe or .txt file. In this page we will explain which temperatures data file this package can handle and how the data is extracted to be used.
 
 Below we present the two types of file in format .txt tolerated by this package : 
 
@@ -12,7 +12,7 @@ Below we present the two types of file in format .txt tolerated by this package 
 
 - Climate projections collected on the portal [DRIAS *Les futurs du climat*](https://www.drias-climat.fr/).
 
-Some data file exemples are available in the `station` folder on the github repository of the package. 
+Some data file examples are available in the `station` folder on the github repository of the package. 
 This package has functions which can read and clean the data temperatures and their dates and return them in a dataframe object :
 
 ```@docs

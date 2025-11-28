@@ -67,7 +67,7 @@ ref_data = load(joinpath(@__DIR__, "references.jld2"))["ref_data"]
     @test FRM_Montpellier == ref_data[21]
     @test FRM_Bonn == ref_data[22]
     @test FRM_Nantes == ref_data[23]
-    #If ref_results is executed, replace "DB" with "EB" in the name of the ref variables (for exemple A_DB_Montpellier_ref -> A_EB_Montpellier_ref)
+    #If ref_results is executed, replace "DB" with "EB" in the name of the ref variables (for example A_DB_Montpellier_ref -> A_EB_Montpellier_ref)
 
     df_vassal_chasselas = @chain begin
         DataFrame(XLSX.readtable(joinpath(@__DIR__, "..", "Data_BB.xlsx"), "data_Tempo"))

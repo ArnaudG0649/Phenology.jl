@@ -22,9 +22,9 @@ function BRIN_Model(date_vec, x, years, doy; p0=[100., 8000.])
     doy = doy[complete_year_index]
     return BRIN_Model([Take_temp_year(x, date_vec, year) for year in years], doy_to_n.(doy, years); p0=p0)
 end
-BRIN_Model(date_vec, x, doy; p0=[100., 8000.]) = BRIN_Model(date_vec, x, unique(year.(date_vec)), doy; p0=p0)
+BRIN_Model(date_vec, x, date_vecBB; p0=[100., 8000.]) = BRIN_Model(date_vec, x, year.(date_vecBB), [length(Date(year(date), 1, 1):date) for date in date_vecBB]; p0=p0)
+BRIN_Model(date_vec, x, doy::AbstractVector{T}; p0=[100., 8000.]) where T<:Integer = BRIN_Model(date_vec, x, unique(year.(date_vec)), doy; p0=p0)
 BRIN_Model(date_vec, x, df::DataFrame; p0=[100., 8000.]) = BRIN_Model(date_vec, x, df.annee, df.jour_de_l_annee; p0=p0)
-BRIN_Model(date_vec, x, date_vecBB::AbstractVector{Date}; p0=[100., 8000.]) = BRIN_Model(date_vec, x, year.(date_vecBB), [length(Date(year(date) - 1, 8, 1):date) for date in date_vecBB]; p0=p0)
 
 """
     Vine_Phenology_Pred(TN_vec::AbstractVector, TX_vec::AbstractVector, date_vec::AbstractVector{Date}; model::BRIN_Model=BRIN_Model())
@@ -37,7 +37,7 @@ The temperatures and dates data can be included in two .txt file, two different 
 """
 function Vine_Phenology_Pred(Tn_vec::AbstractVector,
     Tx_vec::AbstractVector,
-    date_vec::AbstractVector{Date};
+    date_vec::AbstractVector{Date},
     model::BRIN_Model=BRIN_Model())
     EB_vec = Date[]
     BB_vec = Date[]
@@ -49,24 +49,22 @@ function Vine_Phenology_Pred(Tn_vec::AbstractVector,
     forcing ? pop!(EB_vec) : nothing #forcing == true at the end means that it added a EB date in EB_vec which won't have it corresponding BB date in BB_vec
     return EB_vec, BB_vec
 end
-function Vine_Phenology_Pred(x::AbstractMatrix, date_vec;
-    model::BRIN_Model=BRIN_Model())
-    return Vine_Phenology_Pred(x[:, 1], x[:, 2], date_vec, model=model)
+function Vine_Phenology_Pred(x::AbstractMatrix, date_vec, model::BRIN_Model=BRIN_Model())
+    return Vine_Phenology_Pred(x[:, 1], x[:, 2], date_vec, model)
 end
-function Vine_Phenology_Pred(df_TN::DataFrame, df_TX::DataFrame;
-    model::BRIN_Model=BRIN_Model())
+function Vine_Phenology_Pred(df_TN::DataFrame, df_TX::DataFrame, model::BRIN_Model=BRIN_Model())
     date_vec, x = Common_indexes([df_TN, df_TX])
-    return Vine_Phenology_Pred(x, date_vec, model=model)
+    return Vine_Phenology_Pred(x, date_vec, model)
 end
 function Vine_Phenology_Pred(
     file_TN::String,
-    file_TX::String;
+    file_TX::String,
     model::BRIN_Model=BRIN_Model())
 
     date_vec, x = Common_indexes(file_TN, file_TX)
-    return Vine_Phenology_Pred(x, date_vec, model=model)
+    return Vine_Phenology_Pred(x, date_vec, model)
 end
-function Vine_Phenology_Pred(df::DataFrame;
+function Vine_Phenology_Pred(df::DataFrame,
     model::BRIN_Model=BRIN_Model())
-    return Vine_Phenology_Pred(df.TN, df.TX, df.DATE, model=model)
+    return Vine_Phenology_Pred(df.TN, df.TX, df.DATE, model)
 end

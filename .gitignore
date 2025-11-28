@@ -4,7 +4,6 @@
 /Manifest*.toml
 /docs/Manifest*.toml
 /docs/build/
-/Data_BB.xlsx
 /test/results.jl
 /g.pdf
 /h.pdf
@@ -14,3 +13,4 @@
 /src/utils.jl
 /2020-2024-Phéno_prod.xlsx
 /Data_BB_Hainfeld.xlsx
+/test/train_algorithm_tests.jl

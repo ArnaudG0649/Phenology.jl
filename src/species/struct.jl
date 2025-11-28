@@ -29,14 +29,13 @@ end
         T0Bc::AbstractFloat=8.19,
         TMBc::AbstractFloat=25.,
         forcing_target::AbstractFloat=13236)
-    BRIN_Model(x_vec::AbstractVector, n_train::AbstractVector; p0=[100., 8000.])
-    BRIN_Model(date_vec, x, years, doy; p0=[100., 8000.])
-    BRIN_Model(date_vec, x, doy; p0=[100., 8000.])
-    BRIN_Model(date_vec, x, df::DataFrame; p0=[100., 8000.])
     BRIN_Model(date_vec, x, date_vecBB::AbstractVector{Date}; p0=[100., 8000.])
+    BRIN_Model(date_vec, x, years, doy; p0=[100., 8000.])
+    BRIN_Model(x_vec::AbstractVector, n_train::AbstractVector; p0=[100., 8000.])
 
 
-Structure which contains the parameters for a phenelogical BRIN model for grapevine. The default values are the ones suggested in [garcia_de_cortazar-atauri_performance_2009](@cite).
+Structure which contains the parameters for a phenelogical BRIN model for grapevine. The default values are the ones suggested in [garcia_de_cortazar-atauri_performance_2009](@cite) (table 5 p 323).
+With the three last methods you can initiate a BRIN_Model by fitting on temperatures, dates et bud burst dates data (see [Training BRIN models](@ref)). It is done with a differential evolution optimization algorithm.
 """
 @concrete struct BRIN_Model
     CPO

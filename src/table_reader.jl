@@ -70,7 +70,7 @@ end
     Common_indexes(files...)
 
 From different ECA&D-type dataframes (with 2 colums) in `series_vec` or extracted in `files` return a tuple with the series of their mutual date and their associated temperatures in a matrix.
-For exemple if we consider a dataframe `df_TN` of daily minimal temperatures from 1985 to 2010 and another one `df_TX` of daily maximal temperatures from 1970 to 2005, `Common_indexes(df_TN,df_TX)` will return a tuple `(date_vec, x)` where :
+For example if we consider a dataframe `df_TN` of daily minimal temperatures from 1985 to 2010 and another one `df_TX` of daily maximal temperatures from 1970 to 2005, `Common_indexes(df_TN,df_TX)` will return a tuple `(date_vec, x)` where :
 - `date_vec` is the dates vector (each day as `Date` object) for the period 1985-2005.
 - `x` is a matrix where the first column is the series of daily minimal temperatures and the second the series of daily maximal temperatures, both corresponding to the dates in date_vec.
 """

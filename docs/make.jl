@@ -6,7 +6,7 @@ using Phenology, CairoMakie
 using Documenter, DocumenterCitations, Literate
 import .Remotes
 
-Literate.markdown(joinpath(@__DIR__, "src", "index", "index.jl"), joinpath(@__DIR__, "src"), mdstrings=true)
+Literate.markdown(joinpath(@__DIR__, "src", "files_to_literate", "index.jl"), joinpath(@__DIR__, "src"), mdstrings=true)
 
 bib = CitationBibliography(joinpath(@__DIR__, "refs.bib");
     style=:authoryear #:numeric  # default
@@ -33,6 +33,7 @@ makedocs(;
         "Freezing Risk" => "freezing_risk.md",
         "Plot extension with CairoMakie" => "Plotting.md",
         "Temperatures data compatibility" => "Temp_data.md",
+        "Training BRIN model" => "BRIN_train.md"
     ],
     # remotes=nothing,
     plugins=[bib],

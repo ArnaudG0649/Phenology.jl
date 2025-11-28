@@ -16,7 +16,7 @@ However, it does not prevent you to use temperatures data from other sources but
 
 The most important functions of this package are `Apple_Phenology_Pred` and `Vine_Phenology_Pred` because they are the ones which predict the phenology dates from daily temperatures.
 
-Exemple : 
+example : 
 ```julia
 using Phenology
 
@@ -31,7 +31,7 @@ N.B `Apple_Phenology_Pred(df_TG_Montpellier)` and `Apple_Phenology_Pred("TG_Mont
 
 If you load [CairoMakie.jl](https://docs.makie.org/stable/explanations/backends/cairomakie.html), you can use functions to easily plot the phenology dates : 
 
-Exemple : 
+example : 
 ```julia
 using CairoMakie
 
@@ -49,7 +49,7 @@ Plot_Pheno_Dates_EB_BB([A_EB_Montpellier, A_EB_Bonn, A_EB_Nantes],
     BB_colors=colors
 )
 ```
-![exemple_plot.png](exemple_plot.png)
+![example_plot.png](example_plot.png)
 ## References
 
 Legave, J. M., Blanke, M., Christen, D., Giovannini, D., Mathieu, V., & Oger, R. (2013). A comprehensive overview of the spatial and temporal variability of apple bud dormancy release and blooming phenology in Western Europe. *International Journal of Biometeorology*, 57(2), 317-331.

@@ -17,7 +17,7 @@ The models used are the ones presented in [legave_comprehensive_2013](@citet) fo
 ### Data extraction
 
 First, we need a file with the temperatures data and their dates. This package is adapted to use some type of txt.file from the [ECA&D](https://www.ecad.eu/dailydata/predefinedseries.php) database and the portal [DRIAS *Les futurs du climat*](https://www.drias-climat.fr/) as it is explained in the section [Temperatures data compatibility](@ref)
-The data files exemples used in this tutorial are available in the `station` folder on the github repository of the package.
+The data files examples used in this tutorial are available in the `station` folder on the github repository of the package.
 As you will see further, the functions to predict phenological dates can take as arguments the data file path but if you want to extract the data in a dataframe you can use the function [`Phenology.extract_series`](@ref) :  
 """
 using Phenology
@@ -51,7 +51,7 @@ You can also predict the risk of freezing after budburst with the functions [`Fr
 df_TN_Bonn = extract_series(joinpath(stations_folder, "TN_Bonn.txt"))
 A_EB_Bonn, A_BB_Bonn = Apple_Phenology_Pred(joinpath(stations_folder, "TG_Bonn.txt"))
 nothing#hide
-# - For exemple we predict the freezing risk after the fourth apple budburst in 1981 : 
+# - For example we predict the freezing risk after the fourth apple budburst in 1981 : 
 FreezingRisk(df_TN_Bonn, A_BB_Bonn[4])
 # - Or after all apple budburst : 
 FreezingRiskMatrix(df_TN_Bonn, A_BB_Bonn)
@@ -60,7 +60,7 @@ md"""
 ### Plots with [CairoMakie](https://docs.makie.org/stable/explanations/backends/cairomakie.html) extension.
 
 If you have the package [CairoMakie.jl](https://docs.makie.org/stable/explanations/backends/cairomakie.html) loaded, you can use multiple plot functions, showed in [Plots with CairoMakie](@ref) section.
-For exemple you can plot the annual phenological dates from predictions on multiple sites : 
+For example you can plot the annual phenological dates from predictions on multiple sites : 
 """
 using CairoMakie
 
