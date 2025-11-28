@@ -28,7 +28,7 @@ CairoMakieExt = "CairoMakie"
 
 [compat]
 CSV = "0.10.15"
-CairoMakie = "0.15.6"
+CairoMakie = "0.15.7"
 ConcreteStructs = "0.2.3"
 DataFrames = "1.8.1"
 DataFramesMeta = "0.15.5"
