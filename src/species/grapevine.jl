@@ -27,10 +27,11 @@ BRIN_Model(date_vec, x, doy::AbstractVector{T}; p0=[100., 8000.]) where T<:Integ
 BRIN_Model(date_vec, x, df::DataFrame; p0=[100., 8000.]) = BRIN_Model(date_vec, x, df.annee, df.jour_de_l_annee; p0=p0)
 
 """
-    Vine_Phenology_Pred(TN_vec::AbstractVector, TX_vec::AbstractVector, date_vec::AbstractVector{Date}; model::BRIN_Model=BRIN_Model())
-    Vine_Phenology_Pred(file_TN::String, file_TX::String; model::BRIN_Model=BRIN_Model())
-    Vine_Phenology_Pred(df_TN::DataFrame, df_TX::DataFrame; model::BRIN_Model=BRIN_Model())
-    Vine_Phenology_Pred(df::DataFrame; model::BRIN_Model=BRIN_Model())
+    Vine_Phenology_Pred(TN_vec::AbstractVector, TX_vec::AbstractVector, date_vec::AbstractVector{Date}, model::BRIN_Model=BRIN_Model())
+    Vine_Phenology_Pred(file_TN::String, file_TX::String, model::BRIN_Model=BRIN_Model())
+    Vine_Phenology_Pred(x::AbstractMatrix, date_vec, model::BRIN_Model=BRIN_Model())
+    Vine_Phenology_Pred(df_TN::DataFrame, df_TX::DataFrame, model::BRIN_Model=BRIN_Model())
+    Vine_Phenology_Pred(df::DataFrame, model::BRIN_Model=BRIN_Model())
 
 From a series of TN `TN_vec`, a series of TX `TX_vec`, their dates in `date_vec` and a vine phenology model `model`, return the endodormancy break dates and budburst dates in two vectors respectively.
 The temperatures and dates data can be included in two .txt file, two different dataframes or one dataframe with the two type of temperature. See [Temperatures data compatibility](@ref) for further explanation about the way to input temperatures data.
