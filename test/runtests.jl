@@ -1,4 +1,4 @@
-using Phenology, JLD2 ,DataFrames, DataFramesMeta, Dates, XLSX
+using Phenology, JLD2, DataFrames, DataFramesMeta, Dates, XLSX
 using Test
 
 # GetAllAttributes(object) = map(field -> getfield(object, field), fieldnames(typeof(object)))
@@ -96,16 +96,13 @@ ref_data = load(joinpath(@__DIR__, "references.jld2"))["ref_data"]
     complete_year_index = findall(year -> Date(year - 1, 8, 1):Date(year, 8, 1) ⊆ date_vec, years)
     years = years[complete_year_index]
 
-    #Separating the temperature for each year conveniently to be used by Pred_n function
-    x_vec = [Take_temp_year(x, date_vec, year) for year in years]
-
     #Defining training data
     model_target = BRIN_Model((8, 1), 2.17, 111., 5, 25, 6578.3)
-    n_train = [Pred_n(model_target, x) for x in x_vec]
+    n_train = [Pred_doy(model_target, x, date_vec, year) for year in years]
 
     #Training data and comparing results with true data
-    model = BRIN_Model(date_vec, x, years, n_train .- length(Date(0, 8, 1):Date(0, 12, 31)))
-    n_pred = [Pred_n(model, x) for x in x_vec]
+    model = BRIN_Model(date_vec, x, years, n_train)
+    n_pred = [Pred_doy(model, x, date_vec, year) for year in years]
     Δ = n_train .- n_pred
     @test sum(Δ .== 0) / length(Δ) > 0.975
 

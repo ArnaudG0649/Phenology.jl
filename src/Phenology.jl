@@ -13,10 +13,8 @@ function Plot_Freeze_Risk end
 function Plot_Freeze_Risk_sample end
 function Plot_Freeze_Risk_Bar end
 
-testfunction(x) = 2x
-
 export AppleModel, BRIN_Model, Apple_Phenology_Pred, Vine_Phenology_Pred, FreezingRisk, FreezingRiskMatrix, Plot_Pheno_Dates_EB_BB, PlotHistogram, Plot_Freeze_Risk, Plot_Freeze_Risk_sample, Plot_Freeze_Risk_Bar, extract_series, Common_indexes, Pred_n
-export Take_temp_year, Iyear_CPO, read_pheno_table, testfunction
+export Take_temp_year, Iyear_CPO, read_pheno_table, Pred_doy
 
 
 end

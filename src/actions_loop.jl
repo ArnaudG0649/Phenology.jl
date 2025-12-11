@@ -194,8 +194,13 @@ function PhenoLoopStep(T, n::Integer, model, chilling, forcing, sumchilling, sum
     return n, chilling, forcing, sumchilling, sumforcing
 end
 # Below model = [Rc_param,chilling_target,Rf_param,forcing_target]
+"""
+    Pred_n(model, T::AbstractVector)
+    Pred_n(model, x::AbstractMatrix)
+    Pred_n(model, TN::AbstractVector, TX::AbstractVector)
 
-
+Return the number of days between the CPO and the budburst from a temperature series only of ONE year
+"""
 function Pred_n(model, T::AbstractVector)
     chilling = true
     forcing = false
@@ -223,3 +228,17 @@ function Pred_n(model, TN::AbstractVector, TX::AbstractVector)
     end
     return n
 end
+
+"""
+    Pred_doy(model, x)
+    Pred_doy(model, x, date_vec, year)
+    Pred_doy(model, TN, TX)
+    Pred_doy(model, TN, TX, date_vec, year)
+
+Return the number of days between the 1ˢᵗ of January and the budburst from a temperature series
+"""
+Pred_doy(model, x) = Pred_n(model, x) - length(Date(0, model.CPO[1], model.CPO[2]):Date(0, 12, 31))
+Pred_doy(model, x, date_vec, year) = Pred_doy(model, Take_temp_year(x, date_vec, year))
+Pred_doy(model, TN, TX) = Pred_doy(model, [TN TX])
+Pred_doy(model, TN, TX, date_vec, year) = Pred_doy(model, [TN TX], date_vec, year)
+
