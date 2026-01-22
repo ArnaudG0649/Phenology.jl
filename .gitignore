@@ -14,3 +14,5 @@
 /2020-2024-Phéno_prod.xlsx
 /Data_BB_Hainfeld.xlsx
 /test/train_algorithm_tests.jl
+/test/L1vsDE.jl
+/models_L1_results.xlsx

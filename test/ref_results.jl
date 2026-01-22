@@ -24,6 +24,10 @@ FRM_Montpellier_ref = FreezingRiskMatrix(df_TN_Montpellier, A_BB_Montpellier_ref
 FRM_Bonn_ref = FreezingRiskMatrix(df_TN_Bonn, A_BB_Bonn_ref)
 FRM_Nantes_ref = FreezingRiskMatrix(df_TN_Nantes, A_BB_Nantes_ref)
 
+FRMC_Montpellier_ref = FreezingRiskMatrix(df_TN_Montpellier, A_BB_Montpellier_ref, consecutive=true)
+FRMC_Bonn_ref = FreezingRiskMatrix(df_TN_Bonn, A_BB_Bonn_ref, consecutive=true)
+FRMC_Nantes_ref = FreezingRiskMatrix(df_TN_Nantes, A_BB_Nantes_ref, consecutive=true)
+
 ## Making grapevine reference results :
 
 G_EB_Montpellier_ref, G_BB_Montpellier_ref = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Montpellier.txt"), joinpath(StationsPath, "TX_Montpellier.txt"))
@@ -57,5 +61,8 @@ G_BB_Nantes4_ref,
 G_BB_Nantes8_ref,
 FRM_Montpellier_ref,
 FRM_Bonn_ref,
-FRM_Nantes_ref)
+FRM_Nantes_ref,
+FRMC_Montpellier_ref,
+FRMC_Bonn_ref,
+FRMC_Nantes_ref)
 )

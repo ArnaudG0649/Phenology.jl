@@ -7,6 +7,7 @@ end
 
 doy_to_n(doy, year; CPO=(8, 1)) = doy + length(Date(year - 1, CPO[1], CPO[2]):Date(year - 1, 12, 31))
 
+BRIN_Model(chilling_target::T, forcing_target::T) where T <: AbstractFloat = BRIN_Model((8, 1), 2.17, chilling_target, 5., 25., forcing_target)
 function BRIN_Model(x_vec::AbstractVector, n_train::AbstractVector; p0=[100., 8000.])
 
     Data_vec = (x_vec, n_train) # [x_vec, n_train, λ, θ₀]

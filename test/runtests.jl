@@ -35,6 +35,10 @@ ref_data = load(joinpath(@__DIR__, "references.jld2"))["ref_data"]
     FRM_Bonn = FreezingRiskMatrix(df_TN_Bonn, A_BB_Bonn)
     FRM_Nantes = FreezingRiskMatrix(df_TN_Nantes, A_BB_Nantes)
 
+    FRMC_Montpellier = FreezingRiskMatrix(df_TN_Montpellier, A_BB_Montpellier, consecutive=true)
+    FRMC_Bonn = FreezingRiskMatrix(df_TN_Bonn, A_BB_Bonn, consecutive=true)
+    FRMC_Nantes = FreezingRiskMatrix(df_TN_Nantes, A_BB_Nantes, consecutive=true)
+
     ## Grapevine results :
 
     G_EB_Montpellier, G_BB_Montpellier = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Montpellier.txt"), joinpath(StationsPath, "TX_Montpellier.txt"))
@@ -67,6 +71,9 @@ ref_data = load(joinpath(@__DIR__, "references.jld2"))["ref_data"]
     @test FRM_Montpellier == ref_data[21]
     @test FRM_Bonn == ref_data[22]
     @test FRM_Nantes == ref_data[23]
+    @test FRMC_Montpellier == ref_data[24]
+    @test FRMC_Bonn == ref_data[25]
+    @test FRMC_Nantes == ref_data[26]
     #If ref_results is executed, replace "DB" with "EB" in the name of the ref variables (for example A_DB_Montpellier_ref -> A_EB_Montpellier_ref)
 
     df_vassal_chasselas = @chain begin
