@@ -571,7 +571,7 @@ function Phenology.Plot_Freeze_Risk_sample(TN_vecs, Date_vec, date_vecsBB; thres
     return fig
 end
 
-function Plot_Freeze_Risk_distribution(TN_vecs, Date_vec, date_vecsBB, years; threshold=-2., PeriodOfInterest=Month(3), CPO=(10, 30))
+function Phenology.Plot_Freeze_Risk_distribution(TN_vecs, Date_vec, date_vecsBB, years; threshold=-2., PeriodOfInterest=Month(3), CPO=(10, 30))
     Mat, year_vec, days_vec = FreezingRiskMatrix(TN_vecs, Date_vec, date_vecsBB; threshold=threshold, PeriodOfInterest=PeriodOfInterest, CPO=CPO)
     Mat_freq = Mat / length(TN_vecs)
 

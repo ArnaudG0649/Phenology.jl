@@ -4,17 +4,21 @@
     Return the maximum number of consecutive integers in the vector `v`.
 """
 function FindMaxConsecutive(v)
-    record = 1
-    count = 1
-    for i in eachindex(v)[2:end]
-        if v[i] == v[i-1] + 1
-            count += 1 
-            count > record ? record = count : nothing
-        else 
-            count = 1
+    if length(v) > 0
+        record = 1
+        count = 1
+        for i in eachindex(v)[2:end]
+            if v[i] == v[i-1] + 1
+                count += 1
+                count > record ? record = count : nothing
+            else
+                count = 1
+            end
         end
+        return record
+    else
+        return 0
     end
-    return record
 end
 
 """
