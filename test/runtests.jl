@@ -42,12 +42,13 @@ ref_data = load(joinpath(@__DIR__, "references.jld2"))["ref_data"]
     ## Grapevine results :
 
     G_EB_Montpellier, G_BB_Montpellier = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Montpellier.txt"), joinpath(StationsPath, "TX_Montpellier.txt"))
-    G_EB_Bonn, G_BB_Bonn = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Bonn.txt"), joinpath(StationsPath, "TX_Bonn.txt"))
-    G_EB_Nantes, G_BB_Nantes = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Nantes.txt"), joinpath(StationsPath, "TX_Nantes.txt"))
+    G_EB_Bonn, G_BB_Bonn, G_FB_Bonn = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Bonn.txt"), joinpath(StationsPath, "TX_Bonn.txt"),bloom_dates=true)
+    G_EB_Nantes, G_BB_Nantes, G_FB_Nantes = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Nantes.txt"), joinpath(StationsPath, "TX_Nantes.txt"),bloom_dates=true)
 
     G_EB_Nantes4, G_BB_Nantes4 = Vine_Phenology_Pred(df4)
     G_EB_Nantes8, G_BB_Nantes8 = Vine_Phenology_Pred(df8)
 
+    
     @test A_EB_Montpellier == ref_data[1]
     @test A_EB_Bonn == ref_data[2]
     @test A_EB_Nantes == ref_data[3]
@@ -74,6 +75,8 @@ ref_data = load(joinpath(@__DIR__, "references.jld2"))["ref_data"]
     @test FRMC_Montpellier == ref_data[24]
     @test FRMC_Bonn == ref_data[25]
     @test FRMC_Nantes == ref_data[26]
+    @test G_FB_Bonn == ref_data[27]
+    @test G_FB_Nantes == ref_data[28]
     #If ref_results is executed, replace "DB" with "EB" in the name of the ref variables (for example A_DB_Montpellier_ref -> A_EB_Montpellier_ref)
 
     df_vassal_chasselas = @chain begin

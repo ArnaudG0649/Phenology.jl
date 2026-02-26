@@ -485,7 +485,7 @@ function Phenology.Plot_Freeze_Risk_Bar(TN_vec, dates_vec_TN, date_vecBB;
     # ax.title = "Number of days with TN ≤ -2°C after budburst"
     ax.titlesize = 17
 
-    println(Counter_vec)
+    # println(Counter_vec)
 
     if isnothing(color)
         plt = barplot!(ax, year.(date_vecBB2), Counter_vec)

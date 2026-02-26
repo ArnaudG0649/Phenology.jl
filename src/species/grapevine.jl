@@ -7,7 +7,7 @@ end
 
 doy_to_n(doy, year; CPO=(8, 1)) = doy + length(Date(year - 1, CPO[1], CPO[2]):Date(year - 1, 12, 31))
 
-BRIN_Model(chilling_target::T, forcing_target::T) where T <: AbstractFloat = BRIN_Model((8, 1), 2.17, chilling_target, 5., 25., forcing_target)
+BRIN_Model(chilling_target::T, forcing_target::T) where T<:AbstractFloat = BRIN_Model((8, 1), 2.17, chilling_target, 5., 25., forcing_target)
 function BRIN_Model(x_vec::AbstractVector, n_train::AbstractVector; p0=[100., 8000.])
 
     Data_vec = (x_vec, n_train) # [x_vec, n_train, λ, θ₀]
@@ -40,33 +40,51 @@ The temperatures and dates data can be included in two .txt file, two different 
 function Vine_Phenology_Pred(Tn_vec::AbstractVector,
     Tx_vec::AbstractVector,
     date_vec::AbstractVector{Date},
-    model::BRIN_Model=BRIN_Model())
+    model::BRIN_Model=BRIN_Model();
+    bloom_dates=false,
+    blooming_target=315 * 24)
     EB_vec = Date[]
     BB_vec = Date[]
     chilling, forcing = false, false
     sumchilling, sumforcing = 0., 0.
-    for (Tn, Tx, date_, Tn1) in zip(Tn_vec[1:(end-1)], Tx_vec[1:(end-1)], date_vec[1:(end-1)], Tn_vec[2:end]) #Tn1 = TN(n+1)
-        EB_vec, BB_vec, chilling, forcing, sumchilling, sumforcing = PhenoLoopStep((Tn, Tx, Tn1), date_, model, EB_vec, BB_vec, chilling, forcing, sumchilling, sumforcing)
+    if bloom_dates
+        FB_vec, blooming = Date[], false
+        for (Tn, Tx, date_, Tn1) in zip(Tn_vec[1:(end-1)], Tx_vec[1:(end-1)], date_vec[1:(end-1)], Tn_vec[2:end]) #Tn1 = TN(n+1)
+            EB_vec, BB_vec, FB_vec, chilling, forcing, blooming, sumchilling, sumforcing = PhenoLoopStep((Tn, Tx, Tn1), date_, model, EB_vec, BB_vec, FB_vec, chilling, forcing, blooming, sumchilling, sumforcing, blooming_target=blooming_target)
+        end
+        forcing ? pop!(EB_vec) : nothing #forcing == true at the end means that it added a EB date in EB_vec which won't have it corresponding BB date in BB_vec
+        if blooming #same logic
+            pop!(EB_vec)
+            pop!(BB_vec)
+        end
+        return EB_vec, BB_vec, FB_vec
+    else
+        for (Tn, Tx, date_, Tn1) in zip(Tn_vec[1:(end-1)], Tx_vec[1:(end-1)], date_vec[1:(end-1)], Tn_vec[2:end]) #Tn1 = TN(n+1)
+            EB_vec, BB_vec, chilling, forcing, sumchilling, sumforcing = PhenoLoopStep((Tn, Tx, Tn1), date_, model, EB_vec, BB_vec, chilling, forcing, sumchilling, sumforcing)
+        end
+        forcing ? pop!(EB_vec) : nothing #forcing == true at the end means that it added a EB date in EB_vec which won't have it corresponding BB date in BB_vec
+        return EB_vec, BB_vec
     end
-    forcing ? pop!(EB_vec) : nothing #forcing == true at the end means that it added a EB date in EB_vec which won't have it corresponding BB date in BB_vec
-    return EB_vec, BB_vec
 end
-function Vine_Phenology_Pred(x::AbstractMatrix, date_vec, model::BRIN_Model=BRIN_Model())
-    return Vine_Phenology_Pred(x[:, 1], x[:, 2], date_vec, model)
+function Vine_Phenology_Pred(x::AbstractMatrix, date_vec, model::BRIN_Model=BRIN_Model(); bloom_dates=false, blooming_target=315 * 24)
+    return Vine_Phenology_Pred(x[:, 1], x[:, 2], date_vec, model, bloom_dates=bloom_dates, blooming_target=blooming_target)
 end
-function Vine_Phenology_Pred(df_TN::DataFrame, df_TX::DataFrame, model::BRIN_Model=BRIN_Model())
+function Vine_Phenology_Pred(df_TN::DataFrame, df_TX::DataFrame, model::BRIN_Model=BRIN_Model(); bloom_dates=false, blooming_target=315 * 24)
     date_vec, x = Common_indexes([df_TN, df_TX])
-    return Vine_Phenology_Pred(x, date_vec, model)
+    return Vine_Phenology_Pred(x, date_vec, model, bloom_dates=bloom_dates, blooming_target=blooming_target)
 end
 function Vine_Phenology_Pred(
     file_TN::String,
     file_TX::String,
-    model::BRIN_Model=BRIN_Model())
-
+    model::BRIN_Model=BRIN_Model();
+    bloom_dates=false,
+    blooming_target=315 * 24)
     date_vec, x = Common_indexes(file_TN, file_TX)
-    return Vine_Phenology_Pred(x, date_vec, model)
+    return Vine_Phenology_Pred(x, date_vec, model, bloom_dates=bloom_dates, blooming_target=blooming_target)
 end
 function Vine_Phenology_Pred(df::DataFrame,
-    model::BRIN_Model=BRIN_Model())
-    return Vine_Phenology_Pred(df.TN, df.TX, df.DATE, model)
+    model::BRIN_Model=BRIN_Model();
+    bloom_dates=false,
+    blooming_target=315 * 24)
+    return Vine_Phenology_Pred(df.TN, df.TX, df.DATE, model, bloom_dates=bloom_dates, blooming_target=blooming_target)
 end

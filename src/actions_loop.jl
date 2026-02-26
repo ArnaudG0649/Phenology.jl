@@ -193,6 +193,38 @@ function PhenoLoopStep(T, n::Integer, model, chilling, forcing, sumchilling, sum
     end
     return n, chilling, forcing, sumchilling, sumforcing
 end
+function PhenoLoopStep(T, date_, model, EB_vec, BB_vec, FB_vec, chilling, forcing, blooming, sumchilling, sumforcing; blooming_target=315 * 24)
+    if (month(date_), day(date_)) == model.CPO #If it's the start of the chilling 
+        chilling = true
+        sumchilling = 0.
+    end
+    if chilling #During chilling, each day we sum the chilling action function applied to the daily temperature.
+        sumchilling += Rc(T, model)
+        if sumchilling > model.chilling_target #When the sum is superior to the chilling target, we swtich to the second part which is forcing.
+            push!(EB_vec, date_)
+            chilling = false
+            forcing = true
+            sumforcing = 0.
+        end
+    end
+    if forcing #For forcing, it's the same logic, and in the end we get the budburst date.
+        sumforcing += Rf(T, model)
+        if sumforcing > model.forcing_target
+            push!(BB_vec, date_)
+            forcing = false
+            blooming = true
+            sumforcing -= Rf(T, model) #because it will be done in the if blooming loop
+        end
+    end
+    if blooming
+        sumforcing += Rf(T, model)
+        if sumforcing > model.forcing_target + blooming_target || (month(date_ + Day(1)), day(date_ + Day(1))) == model.CPO #to avoid an overlap
+            push!(FB_vec, date_)
+            blooming = false
+        end
+    end
+    return EB_vec, BB_vec, FB_vec, chilling, forcing, blooming, sumchilling, sumforcing
+end
 # Below model = [Rc_param,chilling_target,Rf_param,forcing_target]
 """
     Pred_n(model, T::AbstractVector)

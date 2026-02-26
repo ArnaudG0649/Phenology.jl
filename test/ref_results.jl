@@ -31,8 +31,8 @@ FRMC_Nantes_ref = FreezingRiskMatrix(df_TN_Nantes, A_BB_Nantes_ref, consecutive=
 ## Making grapevine reference results :
 
 G_EB_Montpellier_ref, G_BB_Montpellier_ref = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Montpellier.txt"), joinpath(StationsPath, "TX_Montpellier.txt"))
-G_EB_Bonn_ref, G_BB_Bonn_ref = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Bonn.txt"), joinpath(StationsPath, "TX_Bonn.txt"))
-G_EB_Nantes_ref, G_BB_Nantes_ref = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Nantes.txt"), joinpath(StationsPath, "TX_Nantes.txt"))
+G_EB_Bonn_ref, G_BB_Bonn_ref, G_FB_Bonn_ref = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Bonn.txt"), joinpath(StationsPath, "TX_Bonn.txt"),bloom_dates=true)
+G_EB_Nantes_ref, G_BB_Nantes_ref, G_FB_Nantes_ref = Vine_Phenology_Pred(joinpath(StationsPath, "TN_Nantes.txt"), joinpath(StationsPath, "TX_Nantes.txt"),bloom_dates=true)
 
 G_EB_Nantes4_ref, G_BB_Nantes4_ref = Vine_Phenology_Pred(df4)
 G_EB_Nantes8_ref, G_BB_Nantes8_ref = Vine_Phenology_Pred(df8)
@@ -64,5 +64,7 @@ FRM_Bonn_ref,
 FRM_Nantes_ref,
 FRMC_Montpellier_ref,
 FRMC_Bonn_ref,
-FRMC_Nantes_ref)
+FRMC_Nantes_ref,
+G_FB_Bonn_ref,
+G_FB_Nantes_ref)
 )

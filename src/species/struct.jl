@@ -46,8 +46,8 @@ With the three last methods you can initiate a `BRIN_Model` by fitting on temper
     forcing_target #Ghc
     BRIN_Model(CPO::Tuple{Integer,Integer}=(8, 1),
         Q10::AbstractFloat=2.17,
-        chilling_target::AbstractFloat=119.0,
-        T0Bc::AbstractFloat=8.19,
+        chilling_target::AbstractFloat=163.677228646276,
+        T0Bc::AbstractFloat=5.,
         TMBc::AbstractFloat=25.,
-        forcing_target::AbstractFloat=13236) = new{typeof(CPO),typeof(Q10),typeof(chilling_target),typeof(T0Bc),typeof(TMBc),typeof(forcing_target)}(CPO, Q10, chilling_target, T0Bc, TMBc, forcing_target)
+        forcing_target::AbstractFloat=7568.51014205757) = new{typeof(CPO),typeof(Q10),typeof(chilling_target),typeof(T0Bc),typeof(TMBc),typeof(forcing_target)}(CPO, Q10, chilling_target, T0Bc, TMBc, forcing_target)
 end
