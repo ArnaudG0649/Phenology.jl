@@ -71,5 +71,5 @@ function FreezingRiskMatrix(TN_vecs, Date_vec, date_vecsBB; threshold=-2., Perio
             Result_Mat[i, j] = sum(Conc_Mat_vec2[:, 1] .== j .&& Conc_Mat_vec2[:, 2] .== i)
         end
     end
-    return Result_Mat, sort(unique(Conc_Mat_vec[:, 1])), 0:maximum(Conc_Mat_vec2[:, 2])
+    return Result_Mat, sort(unique(Conc_Mat_vec[:, 1])), 0:maximum(Conc_Mat_vec[:, 2])
 end
