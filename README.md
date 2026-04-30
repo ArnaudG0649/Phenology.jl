@@ -55,3 +55,13 @@ Plot_Pheno_Dates_EB_BB([A_EB_Montpellier, A_EB_Bonn, A_EB_Nantes],
 Legave, J. M., Blanke, M., Christen, D., Giovannini, D., Mathieu, V., & Oger, R. (2013). A comprehensive overview of the spatial and temporal variability of apple bud dormancy release and blooming phenology in Western Europe. *International Journal of Biometeorology*, 57(2), 317-331.
 
 García de Cortázar-Atauri, I., Brisson, N., & Gaudillere, J. P. (2009). Performance of several models for predicting budburst date of grapevine (Vitis vinifera L.). *International Journal of Biometeorology*, 53(4), 317-326.
+
+# TODO
+
+- Remove dependence on `XLSX.jl` 
+- Check other dependency of package
+- Use ECAD.jl ?
+- Refactor the code
+    - Optimization, to have a better interface with Optimizations.jl and dependency through package extensions.
+    - Makie extension should not be CairoMakie specific
+    - Structure construction and fit should be separated (abuse of multiple dispatch I think)
